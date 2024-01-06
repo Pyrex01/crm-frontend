@@ -1,8 +1,11 @@
+import { Outlet } from "react-router-dom";
 import "./App.css";
-import Root from "./screens/Root";
-
-function App() {
-	return <Root />;
+import Header from "./components/Header";
+export default function Root() {
+	return (
+		<>
+			<Header />
+			<Outlet/>
+		</>
+	);
 }
-
-export default App;

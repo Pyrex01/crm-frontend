@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function Hero() {
 	return (
 		<section className="h-screen bg-white dark:bg-gray-900" >
@@ -9,8 +11,8 @@ export default function Hero() {
 					<p className="max-w-2xl mb-6 font-light text-gray-500 lg:mb-8 md:text-lg lg:text-xl dark:text-gray-400">
 						Manage your user with ease...
 					</p>
-					<a
-						href="#"
+					<Link
+						to="/dashboard"
 						className="inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-gray-800 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900"
 					>
 						Get started
@@ -26,13 +28,13 @@ export default function Hero() {
 								clipRule="evenodd"
 							/>
 						</svg>
-					</a>
-					<a
-						href="#"
+					</Link>
+					<Link
+						to="/login"
 						className="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-gray-900 border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
 					>
 						Login
-					</a>
+					</Link>
 				</div>
 				<div className="hidden lg:mt-0 lg:col-span-5 lg:flex">
 					<img
