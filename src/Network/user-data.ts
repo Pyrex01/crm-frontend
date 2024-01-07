@@ -15,7 +15,7 @@ interface LoginUserResponse {
 export async function fetchUserToken(
   username: string,
   password: string
-): LoginUserDetail | null {
+): Promise<LoginUserDetail | null> {
   try {
     const response:AxiosResponse<LoginUserResponse> =
       await netInstance.post<LoginUserResponse>("/user/login", {
@@ -23,6 +23,9 @@ export async function fetchUserToken(
         password,
       });
     netInstance.defaults.headers.common['Authorization'] = `bearer ${response.data.token}`;
+    toast.success('login successfull',{
+      position: toast.POSITION.BOTTOM_RIGHT,
+    })
     return parseJwt(response.data.token)
 
   } catch (e) {
