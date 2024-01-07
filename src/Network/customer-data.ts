@@ -56,3 +56,24 @@ export async function fetchCustomer(id: string): Promise<CustomerDetailPayLoad> 
     throw e;
   }
 }
+
+export async function deleteCustomer(id: string): Promise<CustomerDetailPayLoad> {
+  try {
+    const response: AxiosResponse<CustomerDetailPayLoad> = await netInstance.delete(
+      `/customer/${id}`,
+    );
+    return response.data;
+  } catch (e) {
+    if (e.response) {
+      toast.error(e.response.data.message, {
+        position: toast.POSITION.BOTTOM_RIGHT,
+      });
+    }
+    toast.error("Opps something went wrong", {
+      position: toast.POSITION.BOTTOM_RIGHT,
+    });
+    throw e;
+  }
+}
+
+
