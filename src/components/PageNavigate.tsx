@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 const data = ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5']; // Sample data array
 
-const NextPrevButtons = () => {
+const NextPrevButtons = ({isPreviosDisable, isNestDisable}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const goToNext = () => {
