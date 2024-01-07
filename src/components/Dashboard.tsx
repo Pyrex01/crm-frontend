@@ -1,4 +1,16 @@
+import { useEffect } from "react";
+import { useAuth } from "../context/AuthContext";
+import {useNavigate} from "react-router-dom";
+import NextPrevButtons from "./PageNavigate";
+
 export default function Dashboard() {
+	const {user} = useAuth();
+	const navigate = useNavigate();
+	useEffect(()=>{
+		if(!user){
+			navigate('/login')
+		}
+	},[user,navigate])
 	return (
 		<div className="dashboard" style={{ marginTop: "120px" }}>
 			<div className="container my-12 mx-auto p-6">
@@ -23,6 +35,7 @@ export default function Dashboard() {
 					</table>
 				</div>
 			</div>
+			<NextPrevButtons/>
 		</div>
 	);
 }

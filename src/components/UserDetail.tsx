@@ -1,4 +1,4 @@
-export default function userDetail() {
+export default function UserDetail() {
 	return (
 		<div className="min-h-screen p-6 bg-gray-200 flex items-center justify-center">
 			<div className="container max-w-screen-lg mx-auto">

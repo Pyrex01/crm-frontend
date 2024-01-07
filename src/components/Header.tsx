@@ -1,6 +1,9 @@
 import { Link, NavLink } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 function Header() {
+	const { user, logout } = useAuth();
+
 	return (
 		<nav className="fixed top-0 left-0 right-0 bg-white border-gray-200 dark:bg-gray-900">
 			<div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
@@ -47,7 +50,7 @@ function Header() {
 							</NavLink>
 						</li>
 						<li>
-						<NavLink
+							<NavLink
 								to="/dashboard"
 								className="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-white-500"
 								aria-current="page"
@@ -56,17 +59,16 @@ function Header() {
 							</NavLink>
 						</li>
 						<li>
-						<NavLink
+							<NavLink
 								to="/about"
 								className="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-white-500"
 								aria-current="page"
 							>
-								
-							About
+								About
 							</NavLink>
 						</li>
 						<li>
-						<NavLink
+							<NavLink
 								to="/contact"
 								className="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-white-500"
 								aria-current="page"
@@ -75,12 +77,24 @@ function Header() {
 							</NavLink>
 						</li>
 						<li>
-							<NavLink
-								to="/login"
-								className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-1 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-							>
-								Login
-							</NavLink>
+							{user ? (
+								<div className="flex">
+									<p className="text-gray-500">Welcome, {user}</p>
+									<button
+										onClick={() => logout()}
+										className="mx-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-1 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+									>
+										Logout
+									</button>
+								</div>
+							) : (
+								<NavLink
+									to="/login"
+									className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-1 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+								>
+									Login
+								</NavLink>
+							)}
 						</li>
 					</ul>
 				</div>
