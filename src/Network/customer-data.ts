@@ -71,6 +71,9 @@ export async function deleteCustomer(
   try {
     const response: AxiosResponse<CustomerDetailPayLoad> =
       await netInstance.delete(`/customer/${id}`);
+      toast.success("customer deleted successfully", {
+        position: toast.POSITION.BOTTOM_RIGHT,
+      });
     return response.data;
   } catch (e) {
     if (e.response) {
