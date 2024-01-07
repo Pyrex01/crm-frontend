@@ -29,10 +29,23 @@ export default function Dashboard() {
     setCurrentPage(currentPage - 1);
   };
 
+  const gotoCreateUser = () => {
+    navigate('/form')
+  }
+
   return (
     <div className="dashboard" style={{ marginTop: "120px" }}>
       <div className="container my-12 mx-auto p-6">
+        <div className="flex justify-between py-2">
         <h1 className="text-2xl font-semibold mb-4">User Dashboard</h1>
+        <input
+          type="button"
+          disabled={rowData.length < pageSize}
+          value={"Create User"}
+          className="bg-green-600 hover:bg-green-900 text-white font-bold py-2 px-4 rounded focus:outline-none"
+          onClick={gotoCreateUser}
+        />
+        </div>
         <div className="bg-white shadow-md rounded-lg overflow-x-auto">
           <table className="w-full min-w-full">
             <thead className="bg-gray-500 text-white">
@@ -74,8 +87,12 @@ export default function Dashboard() {
 }
 
 function Row({ customerRow }) {
+  const navigate = useNavigate();
+  const gotoCustomerDetail = () =>{
+    navigate(`/customer/${customerRow.id}`)
+  }
   return (
-    <tr className="cursor-pointer hover:bg-blue-100">
+    <tr className="cursor-pointer hover:bg-blue-100" onClick={gotoCustomerDetail}>
       <td className="py-3 px-4">
         <img
           src="https://via.placeholder.com/40"

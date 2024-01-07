@@ -4,9 +4,9 @@ import Root from "./components/Root";
 import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
 import Form from "./components/Form";
-import UserDetail from "./components/UserDetail";
 import { AuthProvider } from "./context/AuthContext";
 import Hero from "./components/Hero";
+import CustomerDetail from "./components/CustomerDetail";
 export default function App() {
 	return (
 		<AuthProvider>
@@ -17,7 +17,7 @@ export default function App() {
 						<Route path="/login" element={<Login />} />
 						<Route path="/dashboard" element={<Dashboard />} />
 						<Route path="/form" element={<Form />} />
-						<Route path="/user" element={<UserDetail />} />
+						<Route path="/customer/:id" element={<CustomerDetail />} />
 					</Route>
 				</Routes>
 			</BrowserRouter>

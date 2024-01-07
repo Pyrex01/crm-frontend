@@ -1,4 +1,8 @@
-export default function UserDetail() {
+import { useParams } from "react-router-dom";
+
+export default function CustomerDetail() {
+	const {id} = useParams();
+	 console.log(id)
 	return (
 		<div className="min-h-screen p-6 bg-gray-200 flex items-center justify-center">
 			<div className="container max-w-screen-lg mx-auto">
