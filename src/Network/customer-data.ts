@@ -18,9 +18,16 @@ export interface CustomerDetailPayLoad {
   description: string;
   note: string;
   address: string;
-  createdAt: string; // Assuming it's a string representation of a date
-  updatedAt: string; // Assuming it's a string representation of a date
+  createdAt: string;
+  updatedAt: string;
   id: string;
+}
+export interface CustomerUpdatePaylaod {
+  id: string;
+  score: number;
+  description: string;
+  note: string;
+  address: string;
 }
 
 export async function fetchCustomers(
@@ -38,11 +45,12 @@ export async function fetchCustomers(
   }
 }
 
-export async function fetchCustomer(id: string): Promise<CustomerDetailPayLoad> {
+export async function fetchCustomer(
+  id: string
+): Promise<CustomerDetailPayLoad> {
   try {
-    const response: AxiosResponse<CustomerDetailPayLoad> = await netInstance.get(
-      `/customer/${id}`,
-    );
+    const response: AxiosResponse<CustomerDetailPayLoad> =
+      await netInstance.get(`/customer/${id}`);
     return response.data;
   } catch (e) {
     if (e.response) {
@@ -57,11 +65,12 @@ export async function fetchCustomer(id: string): Promise<CustomerDetailPayLoad> 
   }
 }
 
-export async function deleteCustomer(id: string): Promise<CustomerDetailPayLoad> {
+export async function deleteCustomer(
+  id: string
+): Promise<CustomerDetailPayLoad> {
   try {
-    const response: AxiosResponse<CustomerDetailPayLoad> = await netInstance.delete(
-      `/customer/${id}`,
-    );
+    const response: AxiosResponse<CustomerDetailPayLoad> =
+      await netInstance.delete(`/customer/${id}`);
     return response.data;
   } catch (e) {
     if (e.response) {
@@ -76,4 +85,23 @@ export async function deleteCustomer(id: string): Promise<CustomerDetailPayLoad>
   }
 }
 
-
+export async function updateCustomer(
+  customerUpdatePaylaod: CustomerUpdatePaylaod
+): Promise<CustomerDetailPayLoad> {
+  try {
+    toast.success("updation successfull", {
+      position: toast.POSITION.BOTTOM_RIGHT,
+    });
+    return await netInstance.post("/customer/update", customerUpdatePaylaod);
+  } catch (e) {
+    if (e.response) {
+      toast.error(e.response.data.message, {
+        position: toast.POSITION.BOTTOM_RIGHT,
+      });
+    }
+    toast.error("Opps something went wrong", {
+      position: toast.POSITION.BOTTOM_RIGHT,
+    });
+    throw e;
+  }
+}

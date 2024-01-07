@@ -52,7 +52,7 @@ export default function Dashboard() {
             </thead>
             <tbody>
               {rowData.map((row) => (
-                <Row customerRow={row} />
+                <Row customerRow={row} key={row.id}/>
               ))}
             </tbody>
           </table>

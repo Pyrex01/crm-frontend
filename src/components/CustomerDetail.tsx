@@ -5,6 +5,7 @@ import {
   CustomerDetailPayLoad,
   deleteCustomer,
   fetchCustomer,
+  updateCustomer,
 } from "../Network/customer-data";
 import { ClipLoader } from "react-spinners";
 
@@ -16,24 +17,59 @@ export default function CustomerDetail() {
   const [edit, setEdit] = useState<boolean>(false);
   const [valuesChagnged, setValuesChagnged] = useState<boolean>(false);
 
-  const [fistName, setFistName] = useState<boolean>(false);
-  const [lastName, setLastName] = useState<boolean>(false);
-  const [email, setEmail] = useState<boolean>(false);
-  const [address, setAddress] = useState<boolean>(false);
-  const [description, setDescription] = useState<boolean>(false);
-  const [score, setScore] = useState<boolean>(false);
-  const [note, setNote] = useState<boolean>(false);
+  const [firstName, setFirstName] = useState<string>();
+  const [lastName, setLastName] = useState<string>();
+  const [email, setEmail] = useState<string>();
+  const [address, setAddress] = useState<string>();
+  const [description, setDescription] = useState<string>();
+  const [score, setScore] = useState<number>();
+  const [note, setNote] = useState<string>();
 
   useEffect(() => {
     fetchCustomer(id!)
       .then((data) => {
-        setCustomer(data);
+        setData(data);
         setState(APIStatus.COMPLETED);
       })
       .catch(() => {
         navigate("/dashboard");
       });
   }, [navigate, id]);
+
+  const setData = (data: CustomerDetailPayLoad) => {
+    setCustomer(data);
+    setFirstName(data.firstName);
+    setLastName(data.lastName);
+    setEmail(data.email);
+    setAddress(data.address);
+    setDescription(data.description);
+    setScore(data.score);
+    setNote(data.note);
+  };
+
+  useEffect(() => {
+    let isChanges = false;
+    isChanges = customer?.firstName !== firstName || isChanges;
+    isChanges = customer?.lastName !== lastName || isChanges;
+    isChanges = customer?.email !== email || isChanges;
+    isChanges = customer?.address !== address || isChanges;
+    isChanges = customer?.description !== description || isChanges;
+    isChanges = customer?.score !== score || isChanges;
+    isChanges = customer?.note !== note || isChanges;
+    if (isChanges != valuesChagnged) {
+      setValuesChagnged(isChanges);
+    }
+  }, [
+    firstName,
+    lastName,
+    email,
+    address,
+    description,
+    score,
+    note,
+    customer,
+    valuesChagnged,
+  ]);
 
   const toggleEdit = () => {
     setEdit(!edit);
@@ -46,8 +82,27 @@ export default function CustomerDetail() {
   const onDelete = async () => {
     try {
       await deleteCustomer(id!);
-    } catch (error) { /* empty */ }
+    } catch (error) {
+      /* empty */
+    }
     navigate("/dashboard");
+  };
+
+  const onUpdate = async () => {
+    console.log("updating customer....");
+    try {
+      const data = await updateCustomer({
+        address,
+        description,
+        id,
+        note,
+        score,
+      });
+      setData(data);
+      setEdit(false);
+    } catch (error) {
+      navigate("/dashboard");
+    }
   };
   return (
     <div className="min-h-screen p-6 bg-gray-200 flex items-center justify-center">
@@ -67,24 +122,20 @@ export default function CustomerDetail() {
                       <p className="text-gray-700 font-semibold">First Name</p>
                       <input
                         type="text"
-                        value={customer?.firstName}
-                        className={
-                          edit
-                            ? "text-gray-600 border border-gray-300 rounded px-2 mx-1 px-2 mx-1"
-                            : "text-gray-600 border-hidden outline-none"
-                        }
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                        className={"text-gray-600 border-hidden outline-none"}
+                        readOnly
                       />
                     </div>
                     <div>
                       <p className="text-gray-700 font-semibold">Last Name</p>
                       <input
                         type="text"
-                        value={customer?.lastName}
-                        className={
-                          edit
-                            ? "text-gray-600 border border-gray-300 rounded px-2 mx-1"
-                            : "text-gray-600 border-hidden outline-none"
-                        }
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                        className={"text-gray-600 border-hidden outline-none"}
+                        readOnly
                       />
                     </div>
                   </div>
@@ -92,48 +143,51 @@ export default function CustomerDetail() {
                     <p className="text-gray-700 font-semibold">Email</p>
                     <input
                       type="text"
-                      value={customer?.email}
-                      className={
-                        edit
-                          ? "text-gray-600 border border-gray-300 rounded px-2 mx-1"
-                          : "text-gray-600 border-hidden outline-none"
-                      }
+                      value={email}
+                      className={"text-gray-600 border-hidden outline-none"}
+                      readOnly
                     />
                   </div>
                   <div>
                     <p className="text-gray-700 font-semibold">Score</p>
                     <input
-                      type="text"
-                      value={customer?.score}
+                      type="number"
+                      value={score}
+                      onChange={(e) => setScore(parseInt(e.target.value))}
                       className={
                         edit
-                          ? "text-gray-600 border border-gray-300 rounded px-2 mx-1"
+                          ? "text-gray-600 border border-gray-300 rounded px-2 mx-1 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                           : "text-gray-600 border-hidden outline-none"
                       }
+                      readOnly={!edit}
                     />
                   </div>
                   <div>
                     <p className="text-gray-700 font-semibold">Address</p>
                     <input
                       type="text"
-                      value={customer?.address}
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
                       className={
                         edit
                           ? "text-gray-600 border border-gray-300 rounded px-2 mx-1"
                           : "text-gray-600 border-hidden outline-none"
                       }
+                      readOnly={!edit}
                     />
                   </div>
                   <div className="col-span-2">
                     <p className="text-gray-700 font-semibold">Description</p>
                     <input
                       type="text"
-                      value={customer?.description}
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
                       className={
                         edit
                           ? "text-gray-600 border border-gray-300 rounded px-2 mx-1"
                           : "text-gray-600 border-hidden outline-none"
                       }
+                      readOnly={!edit}
                     />
                   </div>
                   <div className="col-span-2">
@@ -141,15 +195,17 @@ export default function CustomerDetail() {
                     <input
                       type="text"
                       value={
-                        customer?.description
-                          ? customer.description
+                        note
+                          ? note
                           : "Some additional notes or comments go here..."
                       }
+                      onChange={(e) => setNote(e.target.value)}
                       className={
                         edit
                           ? "text-gray-600 border border-gray-300 rounded px-2 mx-1"
                           : "text-gray-600 border-hidden outline-none"
                       }
+                      readOnly={!edit}
                     />
                   </div>
                 </div>
@@ -176,11 +232,11 @@ export default function CustomerDetail() {
                     />
                     {valuesChagnged ? (
                       <input
-                        disabled={valuesChagnged}
+                        disabled={!valuesChagnged}
                         type="button"
                         className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 mx-1 rounded"
                         value={"Update"}
-                        onClick={toggleEdit}
+                        onClick={onUpdate}
                       />
                     ) : (
                       <></>
