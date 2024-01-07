@@ -4,17 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { CustomerRow, fetchCustomers } from "../Network/customer-data";
 
 export default function Dashboard() {
-  const { user } = useAuth();
   const navigate = useNavigate();
   const pageSize = 10;
   const [rowData, setRowData] = useState<CustomerRow[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
-
-  useEffect(() => {
-    if (!user) {
-      navigate("/login");
-    }
-  }, [user, navigate]);
 
   useEffect(() => {
     fetchCustomers(currentPage, pageSize).then(setRowData);
