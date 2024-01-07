@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { fetchUserToken } from "../Network/user-data";
+import { LoginUserDetail, fetchUserToken } from "../Network/user-data";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
@@ -9,9 +9,9 @@ export default function Login() {
 	const [password,setPassword] = useState("");
 	const navigate = useNavigate();
 	const loginUser=async()=>{
-		const userData = await fetchUserToken(username,password)
+		const userData: LoginUserDetail = await fetchUserToken(username,password)
 		if(userData){
-			login(userData.username);
+			login(userData);
 			navigate('/')
 		}
 	}

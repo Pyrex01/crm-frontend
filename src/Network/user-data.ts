@@ -7,6 +7,7 @@ export interface LoginUserDetail {
   firstName: string;
   lastName: string;
   username: string;
+  token: string;
 }
 
 interface LoginUserResponse {
@@ -17,31 +18,45 @@ export async function fetchUserToken(
   password: string
 ): Promise<LoginUserDetail | null> {
   try {
-    const response:AxiosResponse<LoginUserResponse> =
+    const response: AxiosResponse<LoginUserResponse> =
       await netInstance.post<LoginUserResponse>("/user/login", {
         username,
         password,
       });
-    netInstance.defaults.headers.common['Authorization'] = `bearer ${response.data.token}`;
-    toast.success('login successfull',{
+    netInstance.defaults.headers.common[
+      "Authorization"
+    ] = `bearer ${response.data.token}`;
+    toast.success("login successfull", {
       position: toast.POSITION.BOTTOM_RIGHT,
-    })
-    return parseJwt(response.data.token)
-
+    });
+    const userData = parseJwt(response.data.token);
+    return { ...userData, token: response.data.token };
   } catch (e) {
-    toast.error(e.response.data.message, {
+    console.log(e);
+    if (e.response) {
+      toast.error(e.response.data.message, {
         position: toast.POSITION.BOTTOM_RIGHT,
       });
-    return null;
+      return null;
+    }
+    toast.error("Opps something went wrong", {
+      position: toast.POSITION.BOTTOM_RIGHT,
+    });
   }
 }
 
-function parseJwt (token) {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
+function parseJwt(token) {
+  const base64Url = token.split(".")[1];
+  const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+  const jsonPayload = decodeURIComponent(
+    window
+      .atob(base64)
+      .split("")
+      .map(function (c) {
+        return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+      })
+      .join("")
+  );
 
-    return JSON.parse(jsonPayload);
+  return JSON.parse(jsonPayload);
 }
