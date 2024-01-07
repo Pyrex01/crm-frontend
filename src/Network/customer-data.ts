@@ -22,6 +22,17 @@ export interface CustomerDetailPayLoad {
   updatedAt: string;
   id: string;
 }
+
+export interface CustomerCreatePayload {
+  firstName: string;
+  lastName: string;
+  email: string;
+  score: number;
+  description: string;
+  note: string;
+  address: string;
+}
+
 export interface CustomerUpdatePaylaod {
   id: string;
   score: number;
@@ -71,9 +82,9 @@ export async function deleteCustomer(
   try {
     const response: AxiosResponse<CustomerDetailPayLoad> =
       await netInstance.delete(`/customer/${id}`);
-      toast.success("customer deleted successfully", {
-        position: toast.POSITION.BOTTOM_RIGHT,
-      });
+    toast.success("customer deleted successfully", {
+      position: toast.POSITION.BOTTOM_RIGHT,
+    });
     return response.data;
   } catch (e) {
     if (e.response) {
@@ -96,6 +107,29 @@ export async function updateCustomer(
       position: toast.POSITION.BOTTOM_RIGHT,
     });
     return await netInstance.post("/customer/update", customerUpdatePaylaod);
+  } catch (e) {
+    if (e.response) {
+      toast.error(e.response.data.message, {
+        position: toast.POSITION.BOTTOM_RIGHT,
+      });
+    }
+    toast.error("Opps something went wrong", {
+      position: toast.POSITION.BOTTOM_RIGHT,
+    });
+    throw e;
+  }
+}
+
+export async function createUser(customerCreatePayload: CustomerCreatePayload) {
+  try {
+    const response = await netInstance.post(
+      "/customer/create",
+      customerCreatePayload
+    );
+    toast.success("customer created successfully", {
+      position: toast.POSITION.BOTTOM_RIGHT,
+    });
+    return response;
   } catch (e) {
     if (e.response) {
       toast.error(e.response.data.message, {
